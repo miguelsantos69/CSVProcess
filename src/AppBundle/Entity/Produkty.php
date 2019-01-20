@@ -49,6 +49,16 @@ class Produkty
      */
     private $cena;
 
+      /**
+     * @var \DateTime
+     * @ORM\Column(type="datetime")
+     */
+    private $ostatniImport;
+  
+    public function __construct() 
+    {
+        $this->ostatniImport = new \DateTime();
+    }
 
     /**
      * Get id
