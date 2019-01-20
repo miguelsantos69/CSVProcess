@@ -22,14 +22,23 @@ class DefaultController extends Controller
      * @Route("/produkty", name="produkty")
      */
     public function lista(Request $request) {
+         
+        $em = $this->getDoctrine()->getManager();
+        $queryBuilder = $em->getRepository('AppBundle:Produkty')->createQueryBuilder('bp');
+        if ($request->query->getAlnum('filter')) {
+            $queryBuilder->where('bp.kodProduktu LIKE :kodProduktu')
+                ->setParameter('kodProduktu', '%' . $request->query->getAlnum('filter') . '%');
+        }
         
-        $productsQuery = $this->getDoctrine()->getRepository(Produkty::class)->findAll();
+        $query = $queryBuilder->getQuery();
         
-        $paginator = $this->get('knp_paginator');
+        $paginator  = $this->get('knp_paginator');
         $products = $paginator->paginate(
-                $productsQuery, 
-                $request->query->getInt('page', 1)/* page number */, 100/* limit per page */
+            $query, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            $request->query->getInt('limit', 10)/*limit per page*/
         );
+
 
         return $this->render('default/produkty.html.twig', [
            'products' => $products,
