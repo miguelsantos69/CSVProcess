@@ -35,8 +35,8 @@ class DefaultController extends Controller
         $paginator  = $this->get('knp_paginator');
         $products = $paginator->paginate(
             $query, /* query NOT result */
-            $request->query->getInt('page', 1)/*page number*/,
-            $request->query->getInt('limit', 10)/*limit per page*/
+            $request->query->getInt('page', 1),
+            $request->query->getInt('limit', 100)
         );
 
 
