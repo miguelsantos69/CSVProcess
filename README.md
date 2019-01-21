@@ -1,4 +1,4 @@
 CSVExport
 =========
 
-A Symfony project created on January 19, 2019, 12:55 am.
+Aplikacja korzysta z [CSVLeague](https://csv.thephpleague.com/) oraz z [KNPPaginatorBundle](https://github.com/KnpLabs/KnpPaginatorBundle)
