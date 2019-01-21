@@ -11,28 +11,27 @@ use AppBundle\Entity\Produkty;
 use League\Csv\Reader;
 use League\Csv\Writer;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use AppBundle\Entity\Historia;
 
 
 class CSVExport extends ContainerAwareCommand {
-    
+
     public function __construct(EntityManagerInterface $em) {
-        
+
         parent::__construct();
 
         $this->em = $em;
     }
 
-    public function configure()
-    {
+    public function configure() {
         $this
                 ->setName('CSVImport')
                 ->setDescription('Importuje plik CSV do bazy danych')
                 ->addArgument('lokalizacja', InputArgument::REQUIRED, 'Lokalizacja pliku')
         ;
     }
-    
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
+
+    protected function execute(InputInterface $input, OutputInterface $output) {
         $io = new SymfonyStyle($input, $output);
         $io->title('Próba importu pliku...');
 
@@ -41,13 +40,14 @@ class CSVExport extends ContainerAwareCommand {
         $reader->setHeaderOffset(0);
 
         $results = $reader->getRecords();
-
+        
         $io->progressStart(iterator_count($results));
 
-        $this->date = $date = date('Y-d-m H.i.s');
+        $pliki = iterator_count($results);
+        $date = date('Y-d-m H.i.s');
         $hour = date('d_m_Y-H_i_s');
 
-        $writer = Writer::createFromPath('%kernel.root_dir%/../src/AppBundle/Odrzucone/odrzucone'.$hour.'.csv', 'w+');
+        $writer = Writer::createFromPath('%kernel.root_dir%/../src/AppBundle/Odrzucone/odrzucone' . $hour . '.csv', 'w+');
 
         foreach ($results as $row) {
 
@@ -69,9 +69,10 @@ class CSVExport extends ContainerAwareCommand {
                         ->setCena($row['price']);
 
                 $this->em->persist($produkt);
+             
                 $io->progressAdvance();
-                
-            } if ($row['qty'] == 0 || $row['price'] == 0 || empty($row['mpn'])) {
+            } 
+            if ($row['qty'] == 0 || $row['price'] == 0 || empty($row['mpn'])) {
 
                 $writer->insertOne([$row['offer_id'],
                     $row['mpn'],
@@ -86,13 +87,15 @@ class CSVExport extends ContainerAwareCommand {
                 continue;
             }
         }
-
+        
         $io->progressFinish();
 
+        $historia = (new Historia())->setPliki($pliki);
+        $this->em->persist($historia);
+        
         $this->em->flush();
 
         $io->success('Import zakonczony sukcesem w dniu ' . $date);
-
     }
     
 }

@@ -48,18 +48,7 @@ class Produkty
      * @ORM\Column(name="cena", type="float")
      */
     private $cena;
-
-      /**
-     * @var \DateTime
-     * @ORM\Column(type="datetime")
-     */
-    private $ostatniImport;
-  
-    public function __construct() 
-    {
-        $this->ostatniImport = new \DateTime();
-    }
-
+    
     /**
      * Get id
      *

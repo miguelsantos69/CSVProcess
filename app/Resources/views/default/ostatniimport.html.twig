@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{% block body %} 
+    
+    <center> Ostatni import miał miejsce:  
+         {{ ostatni.ostatniimport|date('Y-d-m H:i:s') }}
+    </center>
+{% endblock %}
