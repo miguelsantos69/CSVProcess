@@ -26,7 +26,7 @@ Polecenie utworzenia tabeli Produkty:
 
 Tabeli Historia:
 
-    CREATE TABLE `jljkjhkj`.`Historia` ( `id` INT NOT NULL AUTO_INCREMENT , 
+    CREATE TABLE `nazwa_bazy`.`Historia` ( `id` INT NOT NULL AUTO_INCREMENT , 
     `pliki` INT NOT NULL , `ostatniImport` DATETIME NOT NULL , 
     PRIMARY KEY (`id`)) ENGINE = InnoDB;
 
